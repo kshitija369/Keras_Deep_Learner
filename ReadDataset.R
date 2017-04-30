@@ -3,7 +3,7 @@ setwd("/Users/sdeshmukh1/Desktop/Kshitija/Keras_assignment/datasets_v1/")
 
 list_files = list.files(path = ".", full.names = FALSE)
 count = 0
-for(dataset in list_files){
+for(dataset in list_files[1]){
   count = count + 1
   print(paste0("Preparing Train & Test data for ", dataset))
   #Read actual data 
@@ -22,6 +22,7 @@ for(dataset in list_files){
   final_df = mapply(FUN = mergeXnDF, labels_df$V1, labels_df$V2, SIMPLIFY = TRUE)
   final_df = t(final_df)
   final_df = final_df[, colSums(is.na(final_df)) != nrow(final_df)]
+  final_df[is.na(final_df)] <- 0
   
   #write train data
   rownames(final_df) = NULL
@@ -40,6 +41,7 @@ for(dataset in list_files){
   test_df= sapply(FUN = mergeXnDF_test, test_rows)
   test_df = t(test_df)
   test_df = test_df[, colSums(is.na(test_df)) != nrow(test_df)]
+  test_df[is.na(test_df)] <- 0
   
   #write test data
   rownames(test_df) = NULL

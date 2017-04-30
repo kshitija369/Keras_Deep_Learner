@@ -16,16 +16,16 @@ directory = "/Users/sdeshmukh1/Desktop/Kshitija/Keras_assignment/datasets_v1"
 sys.stdout = open('/Users/sdeshmukh1/Desktop/Kshitija/Keras_assignment/accuracy_metric.txt', 'w')
 # fix random seed for reproducibility
 numpy.random.seed(7)
-    
+err = 0
+count = 0
 for filename in listdir(directory):
     try:
         if filename.startswith("."):
             continue
-        print("Training model for train dataset of " + filename)
+        print("Training model for train dataset of " + filename + "\n")
         # load dataset
         train_path = path.join(directory, filename) + "/train0.csv"
         test_path = path.join(directory, filename) + "/test0.csv"
-        print(train_path)
             
         dataset = numpy.loadtxt(train_path, delimiter=",", skiprows=1)
         dataset_test = numpy.loadtxt(test_path, delimiter=",", skiprows=1)
@@ -51,6 +51,10 @@ for filename in listdir(directory):
         
         # evaluate the model
         scores = model.evaluate(X_test, Y_test, verbose=1)
-        print("Evaluation \n%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
+        print("Evaluation \n%s: %.2f%% \n" % (model.metrics_names[1], scores[1]*100))
+        err = err + (1 - scores[1])
+        count = count + 1
     except ValueError:
         print("Oops!  That was no valid number.  Try again... Dataset " + filename)
+        
+print("Error: %.2f for total %d datasets" % (err, count))
